@@ -103,7 +103,7 @@ extension Command {
             let table = Table(
                 columnCount: 5,
                 tableTitle: tableTitle,
-                accuracy: 2,
+                accuracy: 1,
                 isInsertMargins: true,
                 isBorderAround: true,
                 isSeparateRows: false
