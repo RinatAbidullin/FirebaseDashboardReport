@@ -8,6 +8,17 @@
 import ArgumentParser
 import Foundation
 
+enum CommandError: LocalizedError {
+    case with(info: String)
+
+    public var errorDescription: String? {
+        switch self {
+        case .with(let info):
+            return info
+        }
+    }
+}
+
 extension Command {
     struct OSVersions: ParsableCommand {
         static var configuration: CommandConfiguration {
@@ -80,8 +91,33 @@ extension Command {
                     osVersions.append(OsVersion(platform: osName, majorVersion: osVersionMajor, userCount: userCount))
                 }
             }
-
-            func printOsVersion() {
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd"
+            
+            let dateFormatterPrint = DateFormatter()
+            dateFormatterPrint.dateFormat = "dd.MM.yyyy"
+            
+            let tableTitle = "From \(dateFormatterPrint.string(from: dateFormatter.date(from: startDate)!)) to \(dateFormatterPrint.string(from: dateFormatter.date(from: endDate)!))"
+            
+            let table = Table(
+                columnCount: 5,
+                tableTitle: tableTitle,
+                accuracy: 2,
+                isInsertMargins: true,
+                isBorderAround: true,
+                isSeparateRows: false
+            )
+            
+            do {
+                try table.set(columnTitles: [
+                    "OS version",
+                    "Users",
+                    "% of all users",
+                    "% of iOS",
+                    "% of Android"
+                ])
+                
                 let allUsersCount = osVersions
                     .map { $0.userCount }.reduce(0, +)
                 let iosUsersCount = osVersions
@@ -99,105 +135,29 @@ extension Command {
                     }
                 }
                 
-                class TableRaw {
-                    var os: String
-                    var users: String
-                    var percentOfAllUsers: String
-                    var percentOfiOS: String
-                    var percentOfAndroid: String
-                    
-                    init(
-                        os: String,
-                        users: String,
-                        percentOfAllUsers: String,
-                        percentOfiOS: String,
-                        percentOfAndroid: String
-                    ) {
-                        self.os = os
-                        self.users = users
-                        self.percentOfAllUsers = percentOfAllUsers
-                        self.percentOfiOS = percentOfiOS
-                        self.percentOfAndroid = percentOfAndroid
+                let rows = sortedOsVersions.compactMap { osVersion -> Row? in
+                    if osVersion.platform.hasPrefix("iOS") {
+                        return CommonIOSVersionRow(
+                            osVersion: osVersion,
+                            allUsersCount: allUsersCount,
+                            iOSUsersCount: iosUsersCount
+                        )
+                    } else if osVersion.platform.hasPrefix("Android") {
+                        return CommonAndroidVersionRow(
+                            osVersion: osVersion,
+                            allUsersCount: allUsersCount,
+                            androidUsersCount: androidUsersCount
+                        )
                     }
-                    
-                    var description: String {
-                        return "\(os)"
-                    }
+                    return nil
                 }
                 
-                var table = [TableRaw]()
-                table.append(TableRaw(
-                    os: "OS Version",
-                    users: "Users",
-                    percentOfAllUsers: "% of all users",
-                    percentOfiOS: "% of iOS",
-                    percentOfAndroid: "% of Android"
-                ))
-                
-                for osVersion in sortedOsVersions {
-                    let percentOfAllUsers = ((Double(osVersion.userCount) / Double(allUsersCount) * 1000).rounded() / 10.0)
-                    let percentOfiOS = osVersion.platform == "iOS" ? ((Double(osVersion.userCount) / Double(iosUsersCount) * 1000).rounded() / 10.0) : 0
-                    let percentOfAndroid = osVersion.platform == "Android" ?  ((Double(osVersion.userCount) / Double(androidUsersCount) * 1000).rounded() / 10.0) : 0
-                    
-                    let tableRaw = TableRaw(
-                        os: osVersion.platform + " " + String(osVersion.majorVersion),
-                        users: String(osVersion.userCount),
-                        percentOfAllUsers: String(percentOfAllUsers),
-                        percentOfiOS: percentOfiOS != 0 ? String(percentOfiOS) : "",
-                        percentOfAndroid: percentOfAndroid != 0 ? String(percentOfAndroid) : ""
-                    )
-                    table.append(tableRaw)
-                }
-                
-                let maxLettersOS = table.map({ $0.os.count }).max()!
-                let maxLettersUsers = table.map({ $0.users.count }).max()!
-                let maxLettersPercentOfAllUsers = table.map({ $0.percentOfAllUsers.count }).max()!
-                let maxLettersPercentOfiOS = table.map({ $0.percentOfiOS.count }).max()!
-                let maxLettersPercentOfAndroid = table.map({ $0.percentOfAndroid.count }).max()!
-                
-                func addWhitespaceIfNeeded(to string: String, and maxCount: Int) -> String {
-                    var string = string
-                    if string.count < maxLettersOS {
-                        string.append(String(repeating: " ", count: maxCount - string.count))
-                    }
-                    return string
-                }
-                
-                func printLine() {
-                    let node = "+"
-                    let border = "-"
-                    print(
-                        node + String(repeating: border, count: maxLettersOS + 2) +
-                        node + String(repeating: border, count: maxLettersUsers + 2) +
-                        node + String(repeating: border, count: maxLettersPercentOfAllUsers + 2) +
-                        node + String(repeating: border, count: maxLettersPercentOfiOS + 2) +
-                        node + String(repeating: border, count: maxLettersPercentOfAndroid + 2) +
-                        node
-                    )
-                }
-                
-                printLine()
-                for raw in table {
-                    let os = addWhitespaceIfNeeded(to: raw.os, and: maxLettersOS)
-                    let users = addWhitespaceIfNeeded(to: raw.users, and: maxLettersUsers)
-                    let percentAllUsers = addWhitespaceIfNeeded(to: raw.percentOfAllUsers, and: maxLettersPercentOfAllUsers)
-                    let percentiOSUsers = addWhitespaceIfNeeded(to: raw.percentOfiOS, and: maxLettersPercentOfiOS)
-                    let percentAndroidUsers = addWhitespaceIfNeeded(to: raw.percentOfAndroid, and: maxLettersPercentOfAndroid)
-                    print("""
-                        | \(os) | \(users) | \(percentAllUsers) | \(percentiOSUsers) | \(percentAndroidUsers) |
-                        """)
-                    printLine()
-                }
+                try table.append(rows: rows)
+            } catch {
+                throw error
             }
             
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyyMMdd"
-            
-            let dateFormatterPrint = DateFormatter()
-            dateFormatterPrint.dateFormat = "dd.MM.yyyy"
-            
-            print("From \(dateFormatterPrint.string(from: dateFormatter.date(from: startDate)!)) to \(dateFormatterPrint.string(from: dateFormatter.date(from: endDate)!))")
-            printOsVersion()
+            table.print()
         }
     }
 }
@@ -214,13 +174,34 @@ class OsVersion {
     }
 }
 
-enum CommandError: Error {
-    case with(info: String)
+struct CommonIOSVersionRow: Row {
+    let osVersion: OsVersion
+    let allUsersCount: Int
+    let iOSUsersCount: Int
+    
+    var rowRepresentation: [RowEntry] {
+        [
+            "\(osVersion.platform) \(osVersion.majorVersion)",
+            osVersion.userCount,
+            Double(osVersion.userCount) / Double(allUsersCount) * 100,
+            Double(osVersion.userCount) / Double(iOSUsersCount) * 100,
+            EmptyRowEntry()
+        ]
+    }
+}
 
-    public var errorDescription: String? {
-        switch self {
-        case .with(let info):
-            return info
-        }
+struct CommonAndroidVersionRow: Row {
+    let osVersion: OsVersion
+    let allUsersCount: Int
+    let androidUsersCount: Int
+    
+    var rowRepresentation: [RowEntry] {
+        [
+            "\(osVersion.platform) \(osVersion.majorVersion)",
+            osVersion.userCount,
+            Double(osVersion.userCount) / Double(allUsersCount) * 100,
+            EmptyRowEntry(),
+            Double(osVersion.userCount) / Double(androidUsersCount) * 100
+        ]
     }
 }

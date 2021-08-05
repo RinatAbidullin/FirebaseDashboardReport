@@ -13,7 +13,7 @@ extension Command {
     struct Main: ParsableCommand {
         static var configuration: CommandConfiguration {
             .init(
-                commandName: "Firebase Dashboard Report Parser",
+                commandName: "fdr",
                 abstract: "A program to parse .csv file contains Firebase dashboard report",
                 version: "0.0.1",
                 subcommands: [
