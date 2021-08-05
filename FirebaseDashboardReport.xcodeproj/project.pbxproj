@@ -3,11 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		5545888826BBDE4600FBFBCE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5545888726BBDE4600FBFBCE /* main.swift */; };
+		5545889026BBE02100FBFBCE /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 5545888F26BBE02100FBFBCE /* ArgumentParser */; };
+		5545889226BBE1C700FBFBCE /* OSVersions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5545889126BBE1C700FBFBCE /* OSVersions.swift */; };
+		5545889426BBE5BF00FBFBCE /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5545889326BBE5BF00FBFBCE /* Table.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +26,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5545888426BBDE4500FBFBCE /* FirebaseDashboardReport */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FirebaseDashboardReport; sourceTree = BUILT_PRODUCTS_DIR; };
+		5545888426BBDE4500FBFBCE /* fdr */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = fdr; sourceTree = BUILT_PRODUCTS_DIR; };
 		5545888726BBDE4600FBFBCE /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		5545889126BBE1C700FBFBCE /* OSVersions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSVersions.swift; sourceTree = "<group>"; };
+		5545889326BBE5BF00FBFBCE /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5545889026BBE02100FBFBCE /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -49,7 +55,7 @@
 		5545888526BBDE4500FBFBCE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5545888426BBDE4500FBFBCE /* FirebaseDashboardReport */,
+				5545888426BBDE4500FBFBCE /* fdr */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -58,6 +64,8 @@
 			isa = PBXGroup;
 			children = (
 				5545888726BBDE4600FBFBCE /* main.swift */,
+				5545889126BBE1C700FBFBCE /* OSVersions.swift */,
+				5545889326BBE5BF00FBFBCE /* Table.swift */,
 			);
 			path = FirebaseDashboardReport;
 			sourceTree = "<group>";
@@ -78,8 +86,11 @@
 			dependencies = (
 			);
 			name = FirebaseDashboardReport;
+			packageProductDependencies = (
+				5545888F26BBE02100FBFBCE /* ArgumentParser */,
+			);
 			productName = FirebaseDashboardReport;
-			productReference = 5545888426BBDE4500FBFBCE /* FirebaseDashboardReport */;
+			productReference = 5545888426BBDE4500FBFBCE /* fdr */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -105,6 +116,9 @@
 				Base,
 			);
 			mainGroup = 5545887B26BBDE4500FBFBCE;
+			packageReferences = (
+				5545888E26BBE02100FBFBCE /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
+			);
 			productRefGroup = 5545888526BBDE4500FBFBCE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -119,6 +133,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5545889426BBE5BF00FBFBCE /* Table.swift in Sources */,
+				5545889226BBE1C700FBFBCE /* OSVersions.swift in Sources */,
 				5545888826BBDE4600FBFBCE /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -177,10 +193,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -232,9 +249,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -247,7 +265,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3CQ4XEPS9C;
 				ENABLE_HARDENED_RUNTIME = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = fdr;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -258,7 +276,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3CQ4XEPS9C;
 				ENABLE_HARDENED_RUNTIME = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = fdr;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -285,6 +303,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5545888E26BBE02100FBFBCE /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-argument-parser";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5545888F26BBE02100FBFBCE /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5545888E26BBE02100FBFBCE /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5545887C26BBDE4500FBFBCE /* Project object */;
 }
