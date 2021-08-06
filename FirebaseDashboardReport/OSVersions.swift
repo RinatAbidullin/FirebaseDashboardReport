@@ -45,7 +45,9 @@ extension Command {
             
             do {
                 if join {
-                    let tableTitle = "From \(versions.startDate) to \(versions.endDate)"
+                    let tableTitle = """
+                    \nFrom \(versions.startDate) to \(versions.endDate)
+                    """
                     
                     let table = Table(
                         columnCount: 5,
@@ -90,8 +92,7 @@ extension Command {
                     let iOSUsersPercent = versions.iOSUsersPersent(accuracy: 1)
                     
                     let iOSTableTitle = """
-                    
-                    From \(versions.startDate) to \(versions.endDate)
+                    \nFrom \(versions.startDate) to \(versions.endDate)
                     iOS is used by \(iOSUsersPercent)% of users
                     """
                     
@@ -128,8 +129,7 @@ extension Command {
                     let androidUsersPercent = versions.androidUsersPersent(accuracy: 1)
                     
                     let androidTableTitle = """
-                    
-                    From \(versions.startDate) to \(versions.endDate)
+                    \nFrom \(versions.startDate) to \(versions.endDate)
                     Android is used by \(androidUsersPercent)% of users
                     """
                     
@@ -165,6 +165,7 @@ extension Command {
             } catch {
                 throw error
             }
+            print("")
         }
     }
 }
