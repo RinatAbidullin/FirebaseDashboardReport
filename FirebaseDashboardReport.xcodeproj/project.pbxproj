@@ -36,6 +36,7 @@
 		5545889526BD2F1700FBFBCE /* FirebaseDashboardReportParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDashboardReportParser.swift; sourceTree = "<group>"; };
 		5545889726BD6EF900FBFBCE /* FirebaseDashboardReportParser+OsVersions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirebaseDashboardReportParser+OsVersions.swift"; sourceTree = "<group>"; };
 		5545889926BDD1A400FBFBCE /* Cat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cat.swift; sourceTree = "<group>"; };
+		5545889B26BDD63300FBFBCE /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +54,7 @@
 		5545887B26BBDE4500FBFBCE = {
 			isa = PBXGroup;
 			children = (
+				5545889B26BDD63300FBFBCE /* README.md */,
 				5545888626BBDE4500FBFBCE /* FirebaseDashboardReport */,
 				5545888526BBDE4500FBFBCE /* Products */,
 			);
