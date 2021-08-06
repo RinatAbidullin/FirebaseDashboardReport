@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5545888326BBDE4500FBFBCE"
-               BuildableName = "FirebaseDashboardReport"
+               BuildableName = "fdr"
                BlueprintName = "FirebaseDashboardReport"
                ReferencedContainer = "container:FirebaseDashboardReport.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5545888326BBDE4500FBFBCE"
-            BuildableName = "FirebaseDashboardReport"
+            BuildableName = "fdr"
             BlueprintName = "FirebaseDashboardReport"
             ReferencedContainer = "container:FirebaseDashboardReport.xcodeproj">
          </BuildableReference>
@@ -63,6 +63,10 @@
             argument = "osversions /Users/rinatab/Downloads/data-export-16.csv --join"
             isEnabled = "NO">
          </CommandLineArgument>
+         <CommandLineArgument
+            argument = "cat"
+            isEnabled = "NO">
+         </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
@@ -76,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5545888326BBDE4500FBFBCE"
-            BuildableName = "FirebaseDashboardReport"
+            BuildableName = "fdr"
             BlueprintName = "FirebaseDashboardReport"
             ReferencedContainer = "container:FirebaseDashboardReport.xcodeproj">
          </BuildableReference>

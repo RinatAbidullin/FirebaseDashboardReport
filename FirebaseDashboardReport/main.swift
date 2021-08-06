@@ -17,7 +17,8 @@ extension Command {
                 abstract: "A program to parse .csv file contains Firebase dashboard report",
                 version: "0.0.1",
                 subcommands: [
-                    Command.OSVersions.self
+                    Command.OSVersions.self,
+                    Command.Cat.self
                 ]
             )
         }
