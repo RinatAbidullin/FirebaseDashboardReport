@@ -15,8 +15,6 @@ chmod u+x /usr/local/bin/fdr
 
 ![allows](README.assets/allows.png)
 
-
-
 Если вас смущает выдача разрешения на выполнение утилиты, вы можете самостоятельно ее скомпилировать, отрыв проект в Xcode.
 
 ## Возможности
@@ -31,7 +29,7 @@ chmod u+x /usr/local/bin/fdr
 fdr osversions data-export.csv
 ```
 
-где `data-export.csv` - путь до csv-файла, скаченного из раздела Dashboard на https://console.firebase.google.com:
+где `data-export.csv` - путь до csv-файла, скачанного из раздела Dashboard на https://console.firebase.google.com:
 
 ![dashboard](README.assets/dashboard.png)
 
