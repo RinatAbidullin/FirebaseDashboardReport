@@ -28,10 +28,10 @@ extension Command {
             )
         }
         
-        @Argument(help: "The first number")
+        @Argument(help: "Location of CSV file")
         var csvfilepath: String
         
-        @Flag(name: .long)
+        @Flag(name: .long, help: "Combine all OS versions into a single table")
         var join: Bool = false
         
         func run() throws {
