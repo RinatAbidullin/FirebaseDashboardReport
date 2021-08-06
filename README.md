@@ -4,7 +4,7 @@
 
 ## Установка
 
-Скопируйте файл `fdr` (он уже заранее скомпилирован и находится в папке [bin](https://github.com/RinatAbidullin/FirebaseDashboardReport/blob/main/bin/fdr)) в папку `/usr/local/bin/`
+Скопируйте файл `fdr` (он уже заранее скомпилирован и находится в папке [bin](https://github.com/RinatAbidullin/FirebaseDashboardReport/blob/main/bin/fdr)) в папку `/usr/local/bin/`. Открыть папку в Finder можно командой `open /usr/local/bin/`.
 
 Возможно также потребуется выдать разрешение на выполнение утилиты `fdr`. Для этого выполните команду:
 
