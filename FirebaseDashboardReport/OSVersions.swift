@@ -31,146 +31,141 @@ extension Command {
         @Argument(help: "The first number")
         var csvfilepath: String
         
+        @Flag(name: .long)
+        var join: Bool = false
+        
         func run() throws {
             // Чтение csv файла
-            guard let contents = try? String(contentsOfFile: csvfilepath, encoding: .utf8) else {
+            guard let content = try? String(contentsOfFile: csvfilepath, encoding: .utf8) else {
                 throw CommandError.with(info: "The csv file was not found on the passed path")
             }
             
-            // Выделяем строки с версиями OS
-            var osVersionsRawWithTitles = [String]()
-            let contentLines = contents.components(separatedBy: "\n")
-            var startFound = false
-            for (index, line) in contentLines.enumerated() {
-                let line = line.trimmingCharacters(in: .newlines)
-                if line.hasPrefix("OS with version,Users") {
-                    osVersionsRawWithTitles.append(
-                        contentLines[index - 2].trimmingCharacters(in: .newlines)
-                    )
-                    osVersionsRawWithTitles.append(
-                        contentLines[index - 1].trimmingCharacters(in: .newlines)
-                    )
-                    startFound = true
-                }
-                if startFound && !line.isEmpty {
-                    osVersionsRawWithTitles.append(
-                        line.trimmingCharacters(in: .newlines)
-                    )
-                } else if startFound && line.isEmpty {
-                    break
-                }
-            }
-            
-            var osVersions = [OsVersion]()
-
-            let startDate = osVersionsRawWithTitles[0].components(separatedBy: ":")[1].trimmingCharacters(in: .whitespaces)
-            let endDate = osVersionsRawWithTitles[1].components(separatedBy: ":")[1].trimmingCharacters(in: .whitespaces)
-            let osVersionsRaw = osVersionsRawWithTitles[3...].joined(separator: "\n")
-            
-            let lines = osVersionsRaw.components(separatedBy: "\n")
-
-            for line in lines {
-                // iOS 12.3.2, 1
-                // Android 4.2.2, 1
-                let osComponents = line.components(separatedBy: ",") // iOS 12.3.2, 1
-                let osNameWithVersion = osComponents[0] // iOS 12.3.2
-                let userCount = Int(osComponents[1])! // 1
-                
-                let osNameWithVersionComponents = osNameWithVersion.components(separatedBy: " ") // iOS 12.3.2
-                let osName = osNameWithVersionComponents[0] // iOS
-                let osVersion = osNameWithVersionComponents[1] // 12.3.2
-
-                let osVersionComponents = osVersion.components(separatedBy: ".") // 12.3.2
-                let osVersionMajor = Int(osVersionComponents[0])! // 12
-                
-                if let existedOsVersion = osVersions.filter(
-                    { $0.platform == osName && $0.majorVersion == osVersionMajor }
-                ).first {
-                    existedOsVersion.userCount += userCount
-                } else {
-                    osVersions.append(OsVersion(platform: osName, majorVersion: osVersionMajor, userCount: userCount))
-                }
-            }
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyyMMdd"
-            
-            let dateFormatterPrint = DateFormatter()
-            dateFormatterPrint.dateFormat = "dd.MM.yyyy"
-            
-            let tableTitle = "From \(dateFormatterPrint.string(from: dateFormatter.date(from: startDate)!)) to \(dateFormatterPrint.string(from: dateFormatter.date(from: endDate)!))"
-            
-            let table = Table(
-                columnCount: 5,
-                tableTitle: tableTitle,
-                accuracy: 1,
-                isInsertMargins: true,
-                isBorderAround: true,
-                isSeparateRows: false
-            )
+            let parser = FirebaseDashboardReportParser(csvRawContent: content)
+            let versions = parser.osVersions()
             
             do {
-                try table.set(columnTitles: [
-                    "OS version",
-                    "Users",
-                    "% of all users",
-                    "% of iOS",
-                    "% of Android"
-                ])
-                
-                let allUsersCount = osVersions
-                    .map { $0.userCount }.reduce(0, +)
-                let iosUsersCount = osVersions
-                    .filter({ $0.platform == "iOS" })
-                    .map { $0.userCount }.reduce(0, +)
-                let androidUsersCount = osVersions
-                    .filter({ $0.platform == "Android" })
-                    .map { $0.userCount }.reduce(0, +)
-                
-                let sortedOsVersions = osVersions.sorted {
-                    if $0.platform != $1.platform {
-                        return $0.platform > $1.platform
-                    } else {
-                        return $0.majorVersion > $1.majorVersion
+                if join {
+                    let tableTitle = "From \(versions.startDate) to \(versions.endDate)"
+                    
+                    let table = Table(
+                        columnCount: 5,
+                        tableTitle: tableTitle,
+                        accuracy: 1,
+                        isInsertMargins: true,
+                        isBorderAround: true,
+                        isSeparateRows: false
+                    )
+                    
+                    try table.set(columnTitles: [
+                        "OS version",
+                        "Users",
+                        "% of all users",
+                        "% of iOS",
+                        "% of Android"
+                    ])
+                    
+                    let rows = versions.versions.compactMap { osVersion -> Row? in
+                        if osVersion.platform.hasPrefix("iOS") {
+                            return CommonIOSVersionRow(
+                                osVersion: osVersion,
+                                allUsersCount: versions.allUsersCount,
+                                iOSUsersCount: versions.iOSUsersCount
+                            )
+                        } else if osVersion.platform.hasPrefix("Android") {
+                            return CommonAndroidVersionRow(
+                                osVersion: osVersion,
+                                allUsersCount: versions.allUsersCount,
+                                androidUsersCount: versions.androidUsersCount
+                            )
+                        }
+                        return nil
                     }
-                }
-                
-                let rows = sortedOsVersions.compactMap { osVersion -> Row? in
-                    if osVersion.platform.hasPrefix("iOS") {
-                        return CommonIOSVersionRow(
-                            osVersion: osVersion,
-                            allUsersCount: allUsersCount,
-                            iOSUsersCount: iosUsersCount
-                        )
-                    } else if osVersion.platform.hasPrefix("Android") {
-                        return CommonAndroidVersionRow(
-                            osVersion: osVersion,
-                            allUsersCount: allUsersCount,
-                            androidUsersCount: androidUsersCount
-                        )
+                    
+                    try table.append(rows: rows)
+                    table.print()
+                } else {
+                    // Две отдельные таблицы
+                    
+                    // iOS
+                    let iOSUsersPercent = versions.iOSUsersPersent(accuracy: 1)
+                    
+                    let iOSTableTitle = """
+                    
+                    From \(versions.startDate) to \(versions.endDate)
+                    iOS is used by \(iOSUsersPercent)% of users
+                    """
+                    
+                    let iOSTable = Table(
+                        columnCount: 3,
+                        tableTitle: iOSTableTitle,
+                        accuracy: 1,
+                        isInsertMargins: true,
+                        isBorderAround: true,
+                        isSeparateRows: false
+                    )
+                    
+                    try iOSTable.set(columnTitles: [
+                        "OS version",
+                        "Users",
+                        "%"
+                    ])
+                    
+                    let iOSRows = versions.versions.compactMap { osVersion -> Row? in
+                        if osVersion.platform.hasPrefix("iOS") {
+                            return SplitIOSVersionRow(
+                                osVersion: osVersion,
+                                allUsersCount: versions.allUsersCount,
+                                iOSUsersCount: versions.iOSUsersCount
+                            )
+                        }
+                        return nil
                     }
-                    return nil
+                    
+                    try iOSTable.append(rows: iOSRows)
+                    iOSTable.print()
+                    
+                    // Android
+                    let androidUsersPercent = versions.androidUsersPersent(accuracy: 1)
+                    
+                    let androidTableTitle = """
+                    
+                    From \(versions.startDate) to \(versions.endDate)
+                    Android is used by \(androidUsersPercent)% of users
+                    """
+                    
+                    let androidTable = Table(
+                        columnCount: 3,
+                        tableTitle: androidTableTitle,
+                        accuracy: 1,
+                        isInsertMargins: true,
+                        isBorderAround: true,
+                        isSeparateRows: false
+                    )
+                    
+                    try androidTable.set(columnTitles: [
+                        "OS version",
+                        "Users",
+                        "%"
+                    ])
+                    
+                    let androidRows = versions.versions.compactMap { osVersion -> Row? in
+                        if osVersion.platform.hasPrefix("Android") {
+                            return SplitAndroidVersionRow(
+                                osVersion: osVersion,
+                                allUsersCount: versions.allUsersCount,
+                                androidUsersCount: versions.androidUsersCount
+                            )
+                        }
+                        return nil
+                    }
+                    
+                    try androidTable.append(rows: androidRows)
+                    androidTable.print()
                 }
-                
-                try table.append(rows: rows)
             } catch {
                 throw error
             }
-            
-            table.print()
         }
-    }
-}
-
-class OsVersion {
-    let platform: String
-    let majorVersion: Int
-    var userCount: Int
-    
-    init(platform: String, majorVersion: Int, userCount: Int) {
-        self.platform = platform
-        self.majorVersion = majorVersion
-        self.userCount = userCount
     }
 }
 
@@ -201,6 +196,34 @@ struct CommonAndroidVersionRow: Row {
             osVersion.userCount,
             Double(osVersion.userCount) / Double(allUsersCount) * 100,
             EmptyRowEntry(),
+            Double(osVersion.userCount) / Double(androidUsersCount) * 100
+        ]
+    }
+}
+
+struct SplitIOSVersionRow: Row {
+    let osVersion: OsVersion
+    let allUsersCount: Int
+    let iOSUsersCount: Int
+    
+    var rowRepresentation: [RowEntry] {
+        [
+            "\(osVersion.platform) \(osVersion.majorVersion)",
+            osVersion.userCount,
+            Double(osVersion.userCount) / Double(iOSUsersCount) * 100,
+        ]
+    }
+}
+
+struct SplitAndroidVersionRow: Row {
+    let osVersion: OsVersion
+    let allUsersCount: Int
+    let androidUsersCount: Int
+    
+    var rowRepresentation: [RowEntry] {
+        [
+            "\(osVersion.platform) \(osVersion.majorVersion)",
+            osVersion.userCount,
             Double(osVersion.userCount) / Double(androidUsersCount) * 100
         ]
     }

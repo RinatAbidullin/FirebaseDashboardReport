@@ -59,6 +59,10 @@
             argument = "osversions /Users/rinatab/Downloads/data-export-16.csv"
             isEnabled = "YES">
          </CommandLineArgument>
+         <CommandLineArgument
+            argument = "osversions /Users/rinatab/Downloads/data-export-16.csv --join"
+            isEnabled = "NO">
+         </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
