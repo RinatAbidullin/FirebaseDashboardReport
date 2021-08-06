@@ -12,6 +12,7 @@
 		5545889226BBE1C700FBFBCE /* OSVersions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5545889126BBE1C700FBFBCE /* OSVersions.swift */; };
 		5545889426BBE5BF00FBFBCE /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5545889326BBE5BF00FBFBCE /* Table.swift */; };
 		5545889626BD2F1700FBFBCE /* FirebaseDashboardReportParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5545889526BD2F1700FBFBCE /* FirebaseDashboardReportParser.swift */; };
+		5545889826BD6EF900FBFBCE /* FirebaseDashboardReportParser+OsVersions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5545889726BD6EF900FBFBCE /* FirebaseDashboardReportParser+OsVersions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +33,7 @@
 		5545889126BBE1C700FBFBCE /* OSVersions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSVersions.swift; sourceTree = "<group>"; };
 		5545889326BBE5BF00FBFBCE /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
 		5545889526BD2F1700FBFBCE /* FirebaseDashboardReportParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDashboardReportParser.swift; sourceTree = "<group>"; };
+		5545889726BD6EF900FBFBCE /* FirebaseDashboardReportParser+OsVersions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirebaseDashboardReportParser+OsVersions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				5545888726BBDE4600FBFBCE /* main.swift */,
 				5545889126BBE1C700FBFBCE /* OSVersions.swift */,
 				5545889526BD2F1700FBFBCE /* FirebaseDashboardReportParser.swift */,
+				5545889726BD6EF900FBFBCE /* FirebaseDashboardReportParser+OsVersions.swift */,
 				5545889326BBE5BF00FBFBCE /* Table.swift */,
 			);
 			path = FirebaseDashboardReport;
@@ -139,6 +142,7 @@
 				5545889626BD2F1700FBFBCE /* FirebaseDashboardReportParser.swift in Sources */,
 				5545889426BBE5BF00FBFBCE /* Table.swift in Sources */,
 				5545889226BBE1C700FBFBCE /* OSVersions.swift in Sources */,
+				5545889826BD6EF900FBFBCE /* FirebaseDashboardReportParser+OsVersions.swift in Sources */,
 				5545888826BBDE4600FBFBCE /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
