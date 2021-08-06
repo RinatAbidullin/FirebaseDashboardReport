@@ -66,15 +66,15 @@ extension FirebaseDashboardReportParser {
             // iOS 12.3.2, 1
             // Android 4.2.2, 1
             let osComponents = line.components(separatedBy: ",") // iOS 12.3.2, 1
-            let osNameWithVersion = osComponents[0] // iOS 12.3.2
-            let userCount = Int(osComponents[1])! // 1
+            let osNameWithVersion = osComponents[0].trimmingCharacters(in: .whitespacesAndNewlines) // iOS 12.3.2
+            let userCount = Int(osComponents[1].trimmingCharacters(in: .whitespacesAndNewlines))! // 1
             
             let osNameWithVersionComponents = osNameWithVersion.components(separatedBy: " ") // iOS 12.3.2
-            let osName = osNameWithVersionComponents[0] // iOS
-            let osVersion = osNameWithVersionComponents[1] // 12.3.2
+            let osName = osNameWithVersionComponents[0].trimmingCharacters(in: .whitespacesAndNewlines) // iOS
+            let osVersion = osNameWithVersionComponents[1].trimmingCharacters(in: .whitespacesAndNewlines) // 12.3.2
 
             let osVersionComponents = osVersion.components(separatedBy: ".") // 12.3.2
-            let osVersionMajor = Int(osVersionComponents[0])! // 12
+            let osVersionMajor = Int(osVersionComponents[0].trimmingCharacters(in: .whitespacesAndNewlines))! // 12
             
             if let existedOsVersion = osVersions.filter(
                 { $0.platform == osName && $0.majorVersion == osVersionMajor }
@@ -150,4 +150,9 @@ class OsVersion {
         self.majorVersion = majorVersion
         self.userCount = userCount
     }
+}
+
+enum OSPlatform: String {
+    case iOS = "iOS"
+    case Android = "Android"
 }
