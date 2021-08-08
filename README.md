@@ -4,18 +4,7 @@
 
 ## Установка
 
-Скопируйте файл `fdr` (он уже заранее скомпилирован и находится в папке [bin](https://github.com/RinatAbidullin/FirebaseDashboardReport/blob/main/bin/fdr)) в папку `/usr/local/bin/`. Открыть папку в Finder можно командой `open /usr/local/bin/`.
-
-Возможно также потребуется выдать разрешение на выполнение утилиты `fdr`. Для этого выполните команду:
-
-```
-chmod u+x /usr/local/bin/fdr
-```
-И в настройках macOS разрешите использование утилиты:
-
-![allows](README.assets/allows.png)
-
-Если вас смущает выдача разрешения на выполнение утилиты, вы можете самостоятельно ее скомпилировать, отрыв проект в Xcode.
+Запустите установщик `fdr-1.0.pkg`([скачать](https://github.com/RinatAbidullin/FirebaseDashboardReport/raw/main/Installer/fdr-1.0.pkg)).  Если вы склонировали репизиторий, его можно найти в папке Installer.
 
 ## Возможности
 
