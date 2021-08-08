@@ -4,7 +4,7 @@
 
 ## Установка
 
-Запустите установщик `fdr-1.0.pkg`([скачать](https://github.com/RinatAbidullin/FirebaseDashboardReport/raw/main/Installer/fdr-1.0.pkg)).  Если вы склонировали репизиторий, его можно найти в папке Installer.
+Запустите установщик `fdr-1.0.pkg`([скачать](https://github.com/RinatAbidullin/FirebaseDashboardReport/raw/main/Installer/fdr-1.0.pkg)).  Если вы склонировали репозиторий, его можно найти в папке Installer.
 
 ## Возможности
 
@@ -12,7 +12,7 @@
 
 Утилита `fdr` позволяет вывести информацию о версиях OS в удобном табличном виде.
 
-Чтобы вывести таблицы по iOS и Android, возвользуйтесь командой:
+Чтобы вывести таблицы по iOS и Android, воспользуйтесь командой (команды вводятся в Терминале):
 
 ```bash
 fdr osversions data-export.csv
@@ -22,7 +22,7 @@ fdr osversions data-export.csv
 
 ![dashboard](README.assets/dashboard.png)
 
-В результате выполнения команды вы увидете следующий результат:
+В результате выполнения команды вы увидите следующий результат:
 
 ```
 From 07.05.2021 to 04.08.2021
