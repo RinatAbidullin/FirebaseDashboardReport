@@ -85,6 +85,8 @@ extension Command {
                     
                     try table.append(rows: rows)
                     table.print()
+                    
+                    print("\nTotal number of users: \(versions.allUsersCount)")
                 } else {
                     // Две отдельные таблицы
                     
@@ -93,7 +95,7 @@ extension Command {
                     
                     let iOSTableTitle = """
                     \nFrom \(versions.startDate) to \(versions.endDate)
-                    iOS is used by \(iOSUsersPercent)% of users
+                    iOS is used by \(versions.iOSUsersCount) users (\(iOSUsersPercent)%)
                     """
                     
                     let iOSTable = Table(
@@ -130,7 +132,7 @@ extension Command {
                     
                     let androidTableTitle = """
                     \nFrom \(versions.startDate) to \(versions.endDate)
-                    Android is used by \(androidUsersPercent)% of users
+                    Android is used by \(versions.androidUsersCount) users (\(androidUsersPercent)%)
                     """
                     
                     let androidTable = Table(
@@ -161,6 +163,8 @@ extension Command {
                     
                     try androidTable.append(rows: androidRows)
                     androidTable.print()
+                    
+                    print("\nTotal number of users: \(versions.allUsersCount)")
                 }
             } catch {
                 throw error
